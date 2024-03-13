@@ -1,0 +1,107 @@
+[log]
+filePath = "./logs"
+logLevel = "info"
+filename = "sed.log"
+maxSize = 200
+maxBackups = 10
+maxAge = 7
+console = true
+
+
+[client]
+callbackUrl = "http://192.168.1.102:17093/v1/newmsg"
+statusCheckUrl = "http://192.168.1.102:17093/v1/client/status"
+callbackTimeoutMilliseconds = 60000
+callbackParallelNumber = 128
+callbackChanSize = 1024
+
+
+[sessions]
+configFilePath = "./conf/sessions.toml"
+
+[app]
+appname="sob0m01000"
+addr = "0.0.0.0"
+port = 18080
+org = "ORG001"
+workspace="DFLT"
+environment="DFLT"
+az = "AZ0001"
+su = "SU0001"
+serviceId = "deposit"
+replyChannelNum = 1024
+glsflag = 0
+printPayload = false
+sendRequestReplyTimeoutMilliseconds = 60000
+enableClientHealthStatCheck = true
+persistentDeliveryMode = false
+enableAppendGlobalTxnIdToTopic = false
+exclusionsAppendGlobalTxnIdTopics = [
+    "asmHeartBeatMetric",
+    "GlscmAgentConf",
+    "SkmGetKeysWithCrypto",
+    "SkmGetRotateKeysWithCrypto",
+    "SkmGetKeys",
+    "SkmGetPublicPem"
+]
+autoAckForAsyncCallback = true
+autoAckForSyncCallback = true
+serviceRelationPath = "./service_relation/service_relation.conf"
+enableOPSAddTargetOrg = false
+designConsistencyCheck = false
+maxPublishMessageInternalCostMilliseconds = 1000
+maxDeliverMessageMESHCostMilliseconds = 2000
+minTimeoutMilliseconds = 15000
+maxServerStopTimeoutSeconds = 30
+receiveMsgIsBufferModel = true
+receiveMsgBufferSize = 1
+callbackFastFailed = true
+    [app.topicTypeVersion]
+    HBT = "v2"
+    ERR = "v2"
+    ALT = "v2"
+    TRN = "v2"
+    LOG = "v2"
+    MTR = "v2"
+    DXC = "v2"
+    DTS = "v1"
+    OPS = "v2"
+
+[deployment]
+enableSecure = false
+key = "wJUizuqdLQr+EuEJwEHP++JepW3Jrpefzo94/CDjns0="
+
+[lookup]
+enable = false
+commonSu = "000000"
+dasPrefix = ["DA"]
+
+[apm]
+enable = true
+printEmptyTraceIdRecordAtClientSide = false
+
+[crypto]
+enable = false
+algo = "AES256"
+mode = "GCM"
+padding = "PKCS7"
+upstreamServices = [ "upstreamServices1", "upstreamServices2" ]
+exclusionsTopics = [
+    "asmHeartBeatMetric",
+    "GlscmAgentConf",
+    "SkmGetKeysWithCrypto",
+    "SkmGetRotateKeysWithCrypto",
+    "SkmGetKeys",
+    "TXN_BEGIN",
+    "TXN_JOIN",
+    "TXN_END",
+    "SkmGetPublicPem"
+]
+skmCryptoAlgorithm = "RSA"
+getServicesKeysTopic = "SkmGetKeysWithCrypto"
+rotateServicesKeysTopic = "SkmGetRotateKeysWithCrypto"
+GetSKMPubKeyTopic = "SkmGetPublicPem"
+serviceKeyActiveHours = 48
+useNewKeyInSeconds = 1800
+keyGenerationTimeInAdvance = 24
+checkPeriod = 60

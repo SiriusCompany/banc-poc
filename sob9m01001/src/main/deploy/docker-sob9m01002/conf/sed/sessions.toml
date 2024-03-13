@@ -1,0 +1,28 @@
+[[sessions]]
+driver = "solace"
+name = "default"
+customSessionEventRejectedMsg = '{"errorCode":"%s","errorMsg":"%s", "response":null}'
+customSessionEventRejectedMsgCode = "44"
+customSessionEventRejectedMsgInfo = "Spool Over Quota. Queue or Topic endpoint limit exceeded"
+    [sessions.attributes]
+    SESSION_VPN_NAME = "default"
+    SESSION_USERNAME = "admin"
+    SESSION_PASSWORD = "admin"
+    SESSION_HOST = "tcp:192.168.1.102:55554"
+
+#    [[sessions.topics]]
+#    type = "DXC"
+#    nodeId = "NODE00000001"
+#    insId = "$INSTANCE_ID"
+#    id = "DEPOSIT_CONFIRM"
+#
+#    [[sessions.topics]]
+#    type = "DXC"
+#    nodeId = "NODE00000001"
+#    insId = "$INSTANCE_ID"
+#    id = "DEPOSIT_CANCEL"
+#
+    [[sessions.queues]]
+    type = "TRN"
+    id = "OB9M1002"
+    version = "v1"

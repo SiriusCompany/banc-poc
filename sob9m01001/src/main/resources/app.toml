@@ -1,0 +1,63 @@
+serverAddress = "http://127.0.0.1:17803"
+callbackPort = 17093
+commType = "mesh"
+port = 6119
+clientSideStatusFSM = true
+
+[service]
+serviceId = "sob9m01001"
+org = "ORG001"
+az = "AZ0001"
+wks = "WKS"
+env = "ENV"
+nodeId = "NODE00000001"
+commonSu = "000000"
+su = "SU0001"
+
+
+[db]
+    [db.default]
+    su = "SU0001"
+    topics = []
+    default = true
+    type= "postgres"
+    addr = "test-ms.cdv0ccgs3e5l.us-east-1.rds.amazonaws.com:5432"
+    user = "postgres"
+    password = "pwdmicros"
+    database = "banc"
+    params = ""
+    debug = false
+        [db.default.pool]
+        maxIdleConns = 50
+        maxOpenConns = 50
+        defaultQueryLimit = 30
+        maxLimitValue = 50000
+        maxLifeValue = 540
+
+
+#[database]
+#    addr = "test-ms.cdv0ccgs3e5l.us-east-1.rds.amazonaws.com"
+#    port = 5432
+#    user = "postgres"
+#    password = "pwdmicros"
+#    database = "banc"
+
+
+[log]
+logFile = "sob9m01001.log"
+logLevel = "info"
+logLevelUnixSocket = "/tmp/sob9m01001-logs.sock"
+logFileRootPath = "./logs"
+maxSize = 200
+maxDays = 7
+maxBackups = 10
+console = true
+mashKeys = ""
+
+
+[eventKey]
+OB9M1001 = "OB9M1001"
+#OB9M1002 = "OB9M1002"
+#OB9M1003 = "OB9M1003"
+#OB9M1004 = "OB9M1004"
+#OB9M1005 = "OB9M1005"

@@ -1,0 +1,34 @@
+serverAddress = "http://127.0.0.1:17803"
+callbackPort = 17093
+commType = "mesh"
+port = 6119
+clientSideStatusFSM = true
+
+[service]
+serviceId = "sob1m01001"
+org = "ORG001"
+az = "AZ0001"
+wks = "WKS"
+env = "ENV"
+nodeId = "NODE00000001"
+commonSu = "000000"
+su = "SU0001"
+
+
+[transaction]
+limit=500
+
+[log]
+logFile = "sob1m01001.log"
+logLevel = "info"
+logLevelUnixSocket = "/tmp/sob1m01001-logs.sock"
+logFileRootPath = "./logs"
+maxSize = 200
+maxDays = 7
+maxBackups = 10
+console = true
+mashKeys = ""
+
+
+[eventKey]
+OB1M1001 = "OB1M1001"

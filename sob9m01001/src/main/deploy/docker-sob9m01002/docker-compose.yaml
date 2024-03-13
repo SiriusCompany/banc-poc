@@ -1,0 +1,39 @@
+version: '2'
+services:
+  sob9m01002sed:
+    privileged: true
+    image: 'hub.multiverse.io/eventkit/sed:0.2.14'
+    ports:
+      - '17803:18080'
+    environment:
+      - INSTANCE_ID=sob0m01000-0
+      - NODE_ID=NODE00000001
+    networks:
+      - deposit
+    volumes:
+      - ./logs/sed:/data/logs
+      - ./logs/sed:/data/sedlogs
+      - ./conf/sed:/data/sed/conf
+      - ./service_relation:/data/comm/service_relation
+#  sob9m01002:
+#    privileged: true
+#    image: 'hub.multiverse.io/eventkit/deposit:1.0.0'
+#    ports:
+#      - '19803:18082'
+#    environment:
+#      - INSTANCE_ID=deposit-0
+#      - NODE_ID=NODE00000001
+#    networks:
+#      - deposit
+#    volumes:
+#      - ./logs/app:/data/app/logs
+#      - ./conf/deposit:/data/app/conf
+
+networks:
+  deposit:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 11.11.12.0/24
+          gateway: 11.11.12.1

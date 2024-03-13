@@ -1,0 +1,95 @@
+serverAddress = "http://127.0.0.1:17803"
+callbackPort = 17093
+commType = "mesh"
+port = 6119
+clientSideStatusFSM = true
+
+[service]
+serviceId = "sob0m01000"
+org = "ORG001"
+az = "AZ0001"
+wks = "WKS"
+env = "ENV"
+nodeId = "NODE00000001"
+commonSu = "000000"
+su = "SU0001"
+
+[auth]
+    grantType = "client_credentials"
+    clientID = "798bh8530bgt72607it8jpjqv9"
+    clientSecret = "2qu3898sbs2rt1b01ppj0aa6i5a6e5psgi1ge5q19t47jo3jdmq"
+    scope = "sirius-sr/read"
+
+[downstream.OB1M1001.customConfigurations]
+specifiedSU="BANCEXPPOC"
+
+[downstream.OB9M1001.customConfigurations]
+specifiedSU="BANCEXPPOC"
+
+[downstream.OB9M1002.customConfigurations]
+specifiedSU="BANCPROPOC"
+
+[log]
+logFile = "sob0m01000.log"
+logLevel = "info"
+logLevelUnixSocket = "/tmp/sob0m01000-logs.sock"
+logFileRootPath = "./logs"
+maxSize = 200
+maxDays = 7
+maxBackups = 10
+console = true
+mashKeys = ""
+
+
+[eventKey]
+OB0M1000 = "OB0M1000"
+
+
+[downstream]
+    [downstream.OB1M1001]
+        eventType = "TRN"
+        eventId = "OB1M1001"
+        timeoutMilliseconds = 20000
+        version = "v1"
+        httpContextType = "application/json"
+    [downstream.OB9M1001]
+        eventType = "TRN"
+        eventId = "OB9M1001"
+        timeoutMilliseconds = 20000
+        version = "v1"
+        httpContextType = "application/json"
+    [downstream.OB9M1002]
+        eventType = "TRN"
+        eventId = "OB9M1002"
+        timeoutMilliseconds = 20000
+        version = "v1"
+        httpContextType = "application/json"
+
+    [downstream.WS000001]
+    eventType = "TRN"
+    eventId = "WS000001"
+    timeoutMilliseconds = 20000
+    version = "v1"
+    httpContextType = "application/json"
+        [downstream.WS000001.responseAutoParseKeyMapping]
+            type = "json"
+            errorCodeKey = "errorCode"
+            errorMsgKey = "errorMsg"
+            responseDataKey = "response"
+        [downstream.WS000001.customConfigurations]
+            timeoutMilliseconds = 18000
+
+    [downstream.WS000002]
+    eventType = "TRN"
+    eventId = "WS000002"
+    timeoutMilliseconds = 20000
+    version = "v1"
+    httpContextType = "application/json"
+        [downstream.WS000002.responseAutoParseKeyMapping]
+            type = "json"
+            errorCodeKey = "errorCode"
+            errorMsgKey = "errorMsg"
+            responseDataKey = "response"
+        [downstream.WS000002.customConfigurations]
+            timeoutMilliseconds = 18000
+

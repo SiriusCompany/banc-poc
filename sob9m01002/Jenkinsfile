@@ -1,0 +1,35 @@
+pipeline {
+    environment {
+      projectName = "sob9m01002"
+    }
+
+    agent any
+    stages {
+	stage('Check out') {
+	   steps{
+	   echo 'Check out code'
+           checkout scm
+	  }
+        }
+
+        stage('Compile binary') {
+            steps {
+                echo 'Building static binary....'
+		sh("cd ${projectName} && make build")
+            }
+        }
+        stage('Build image') {
+            steps {
+                echo 'Build running image....'
+		sh("cd ${projectName} && make image registry=${registry}")
+            }
+        }
+	stage('Push image') {
+            steps {
+                echo 'Push  image....'
+		sh("cd ${projectName} && make push registry=${registry}")
+            }
+        }
+
+    }
+}

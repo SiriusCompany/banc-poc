@@ -1,0 +1,44 @@
+serverAddress = "http://127.0.0.1:17803"
+callbackPort = 17093
+commType = "mesh"
+port = 6119
+clientSideStatusFSM = true
+
+[service]
+serviceId = "sob9m01002"
+org = "ORG001"
+az = "AZ0001"
+wks = "WKS"
+env = "ENV"
+nodeId = "NODE00000001"
+commonSu = "000000"
+su = "SU0001"
+
+[database]
+    addr = "test-ms.cdv0ccgs3e5l.us-east-1.rds.amazonaws.com"
+    port = 5432
+    user = "postgres"
+    password = "pwdmicros"
+    database = "banc"
+
+[s3]
+    enable = true
+    accessKeyID = "AKIA3QE6HI7HCZ6JUKJD"
+    secretAccessKey = "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"
+    bucket = "bancpoc"
+    region = "ap-southeast-1"
+
+[log]
+logFile = "sob9m01002.log"
+logLevel = "info"
+logLevelUnixSocket = "/tmp/sob9m01002-logs.sock"
+logFileRootPath = "./logs"
+maxSize = 200
+maxDays = 7
+maxBackups = 10
+console = true
+mashKeys = ""
+
+
+[eventKey]
+OB9M1002 = "OB9M1002"
