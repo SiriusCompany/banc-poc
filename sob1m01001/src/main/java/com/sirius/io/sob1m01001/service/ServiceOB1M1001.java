@@ -24,6 +24,7 @@ public class ServiceOB1M1001 {
         if (-1 != limit && ob1M1001Request.getAmount() > limit) {
             ob1M1001Response.setOk(false);
         }
+        ob1m1001Response.setOk(true);
 
         return new Tuple2<>(ob1M1001Response, null);
     }
