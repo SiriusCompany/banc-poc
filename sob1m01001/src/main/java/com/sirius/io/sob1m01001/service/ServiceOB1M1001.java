@@ -23,8 +23,9 @@ public class ServiceOB1M1001 {
         long limit = this.config.getConfigInc().getLong("transaction.limit", -1);
         if (-1 != limit && ob1M1001Request.getAmount() > limit) {
             ob1M1001Response.setOk(false);
+        } else {
+            ob1m1001Response.setOk(true);
         }
-        ob1m1001Response.setOk(true);
 
         return new Tuple2<>(ob1M1001Response, null);
     }

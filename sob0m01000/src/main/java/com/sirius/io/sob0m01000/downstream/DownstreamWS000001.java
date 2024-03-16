@@ -20,9 +20,9 @@ public class DownstreamWS000001 {
     @Autowired
     private RemoteCall remoteCall;
 
-    public ResponseMeta<AOGResponse> callWS000001(Map<String,String> header, String wS000001Request) {
+    public ResponseMeta<AOGResponse> callWS000001(Map<String,String> header, String ws000001Request) {
         DefaultRequest meshRequest = DefaultRequest.build()
-                .setBody(wS000001Request.getBytes(StandardCharsets.UTF_8));
+                .setBody(ws000001Request.getBytes(StandardCharsets.UTF_8));
 
         meshRequest.requestOptions().setHeader(header)
                 .setEncoder(CodecType.TEXT)
