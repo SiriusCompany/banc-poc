@@ -11,14 +11,15 @@ import com.sirius.io.constant.ErrorCode;
 import com.sirius.io.dao.PageResult;
 import com.sirius.io.model.OB9M1002Request;
 import com.sirius.io.model.OB9M1002Response;
-import com.sirius.io.sob9m01002.dao.TransactionHistoryDAO;
-import com.sirius.io.sob9m01002.entity.TransactionHistory;
+import com.sirius.io.sob9m01002.dao.BalanceAccumulationHistoryDAO;
+import com.sirius.io.sob9m01002.entity.BalanceAccumulationHistory;
 import com.sirius.io.sob9m01002.handler.Sob9m01002Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
 
@@ -32,24 +33,24 @@ public class ServiceOB9M1002 {
     private ServiceConfigsProperties config;
 
     @Autowired
-    private TransactionHistoryDAO transactionHistoryDAO;
+    private BalanceAccumulationHistoryDAO balanceAccumulationHistoryDAO;
 
     @Autowired
     private AmazonS3 amazonS3;
 
 
     public Tuple2<OB9M1002Response, Map<String,String>> handleOB9M1002(Map<String,String> requestHeader, OB9M1002Request ob9M1002Request) throws ServiceException {
-        TransactionHistory transactionHistory = new TransactionHistory();
-        transactionHistory.setTransactionID(ob9M1002Request.getTransactionID());
-        transactionHistory.setUserID(ob9M1002Request.getUserID());
-        transactionHistory.setAccountID(ob9M1002Request.getAccountID());
+        BalanceAccumulationHistory transactionHistory = new BalanceAccumulationHistory();
+        transactionHistory.setTransactionId(ob9M1002Request.getTransactionId());
+        transactionHistory.setIdUser(ob9M1002Request.getIdUser());
+        transactionHistory.setIdAccount(ob9M1002Request.getIdAccount());
         transactionHistory.setTransactionAmount(ob9M1002Request.getTransactionAmount());
         transactionHistory.setRetCode(ob9M1002Request.getRetCode());
         transactionHistory.setRetMessage(ob9M1002Request.getRetMessage());
         transactionHistory.setBalance(ob9M1002Request.getBalance());
-        transactionHistory.setCreateTime(new Date());
+        transactionHistory.setCreateTime(new Timestamp(new Date().getTime()));
 
-        if (0 == transactionHistoryDAO.insert(transactionHistory)) {
+        if (0 == this.balanceAccumulationHistoryDAO.insert(transactionHistory)) {
             throw new ServiceException(ErrorCode.Banc000001, "Failed to insert record into db");
         }
 
@@ -57,7 +58,7 @@ public class ServiceOB9M1002 {
         // 2. save the transaction information into s3
         if (config.getConfigInc().getBoolean("s3.enable")) {
             try {
-                putObjectResult = amazonS3.putObject(config.getConfigInc().getString("s3.bucket"), transactionHistory.getTransactionID(), JSON.toJSONString(transactionHistory));
+                putObjectResult = amazonS3.putObject(config.getConfigInc().getString("s3.bucket"), transactionHistory.getTransactionId(), JSON.toJSONString(transactionHistory));
                 logger.info("Successfully put object to S3, the putObjectResult:[ETag: {} - VersionId: {} - Expiration: {} - contentMd5: {}]",
                         putObjectResult.getETag(), putObjectResult.getVersionId(), putObjectResult.getExpirationTime(), putObjectResult.getContentMd5());
             } catch (Exception e) {
@@ -67,38 +68,38 @@ public class ServiceOB9M1002 {
         }
 
         OB9M1002Response OB9M1002Response = new OB9M1002Response();
-        OB9M1002Response.setCreateTime(transactionHistory.getCreateTime().toString());
+        OB9M1002Response.setCreateDate(transactionHistory.getCreateTime().toString());
 
         return new Tuple2<>(OB9M1002Response, null);
     }
 
     public Tuple2<OB9M1002Response, Map<String,String>> findById(Map<String,String> requestHeader, OB9M1002Request ob9M1002Request) {
-        TransactionHistory transactionHistory = new TransactionHistory();
-        transactionHistory.setTransactionID(ob9M1002Request.getTransactionID());
+        BalanceAccumulationHistory balanceAccumulationHistory = new BalanceAccumulationHistory();
+        balanceAccumulationHistory.setTransactionId(ob9M1002Request.getTransactionId());
 
-        TransactionHistory retrievedObject = this.transactionHistoryDAO.findById(transactionHistory);
+        BalanceAccumulationHistory retrievedObject = this.balanceAccumulationHistoryDAO.findById(balanceAccumulationHistory);
 
         if (null == retrievedObject) {
-            throw new ServiceException(ErrorCode.Banc000001, "Cannot found record by user id:%s", ob9M1002Request.getUserID());
+            throw new ServiceException(ErrorCode.Banc000001, "Cannot found record by user id:%s", ob9M1002Request.getIdUser());
         }
         OB9M1002Response OB9M1002Response = new OB9M1002Response();
 
-        OB9M1002Response.setTransactionID(retrievedObject.getTransactionID());
-        OB9M1002Response.setUserID(retrievedObject.getUserID());
+        OB9M1002Response.setTransactionId(retrievedObject.getTransactionId());
+        OB9M1002Response.setIdUser(retrievedObject.getIdUser());
         OB9M1002Response.setBalance(retrievedObject.getBalance());
         OB9M1002Response.setRetCode(retrievedObject.getRetCode());
         OB9M1002Response.setRetMessage(retrievedObject.getRetMessage());
         OB9M1002Response.setTransactionAmount(retrievedObject.getTransactionAmount());
-        OB9M1002Response.setCreateTime(retrievedObject.getCreateTime().toString());
+        OB9M1002Response.setCreateDate(retrievedObject.getCreateTime().toString());
 
         return new Tuple2<>(OB9M1002Response, null);
     }
 
     public Tuple2<OB9M1002Response, Map<String,String>> update(Map<String,String> requestHeader, OB9M1002Request ob9M1002Request) {
-        TransactionHistory transactionHistory = new TransactionHistory();
-        transactionHistory.setTransactionID(ob9M1002Request.getTransactionID());
+        BalanceAccumulationHistory transactionHistory = new BalanceAccumulationHistory();
+        transactionHistory.setTransactionId(ob9M1002Request.getTransactionId());
 
-        if (0 == this.transactionHistoryDAO.updateById(transactionHistory)) {
+        if (0 == this.balanceAccumulationHistoryDAO.updateById(transactionHistory)) {
             throw new ServiceException(ErrorCode.Banc000001, "Failed to update the record");
         }
 
@@ -106,17 +107,17 @@ public class ServiceOB9M1002 {
     }
 
     public Tuple2<OB9M1002Response, Map<String,String>> delete(Map<String,String> requestHeader, OB9M1002Request ob9M1002Request) {
-        TransactionHistory transactionHistory = new TransactionHistory();
-        transactionHistory.setTransactionID(ob9M1002Request.getTransactionID());
+        BalanceAccumulationHistory balanceAccumulationHistory = new BalanceAccumulationHistory();
+        balanceAccumulationHistory.setTransactionId(ob9M1002Request.getTransactionId());
 
-        if (0 == this.transactionHistoryDAO.deleteById(transactionHistory)) {
-            throw new ServiceException(ErrorCode.Banc000001, "Failed to delete record by user id:%s", ob9M1002Request.getUserID());
+        if (0 == this.balanceAccumulationHistoryDAO.deleteById(balanceAccumulationHistory)) {
+            throw new ServiceException(ErrorCode.Banc000001, "Failed to delete record by user id:%s", ob9M1002Request.getIdUser());
         }
 
         return new Tuple2<>(new OB9M1002Response(), null);
     }
 
-    public PageResult<TransactionHistory> findPage(OB9M1002Request ob9M1002Request) throws ServiceException {
-        return this.transactionHistoryDAO.findPage(Util.currentDbType(), ob9M1002Request.getPage(), ob9M1002Request.getPageSize(), "", "", null);
+    public PageResult<BalanceAccumulationHistory> findPage(OB9M1002Request ob9M1002Request) throws ServiceException {
+        return this.balanceAccumulationHistoryDAO.findPage(Util.currentDbType(), ob9M1002Request.getPage(), ob9M1002Request.getPageSize(), "", "", null);
     }
 }

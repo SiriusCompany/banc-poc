@@ -1,25 +1,28 @@
 package com.sirius.io.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public class OB1M1001Request implements Serializable {
-    @JsonProperty("amount")
-    private long amount;
 
-    public long getAmount() {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class OB1M1001Request implements Serializable {    
+    
+    @JsonProperty("amount")
+    private Long amount;
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(long amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
-
+	
     @Override
     public String toString() {
-        return "Sob1m01001Request{" +
-                "amount=" + amount +
+        return "OB1M1001Request{"  +
+		"amount='" + amount + '\''  +
                 '}';
     }
 }

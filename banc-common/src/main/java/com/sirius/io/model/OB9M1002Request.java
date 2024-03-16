@@ -1,76 +1,86 @@
 package com.sirius.io.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 
-public class OB9M1002Request implements Serializable {
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class OB9M1002Request implements Serializable {    
+    @NotNull(message = "transaction_id cannot be null")
     @JsonProperty("transaction_id")
-    private String transactionID;
-
+    private String transactionId;
+    
+    
     @JsonProperty("id_user")
-    private String userID;
-
+    private String idUser;
+    
+    
     @JsonProperty("id_account")
-    private String accountID;
-
+    private String idAccount;
+    
+    
     @JsonProperty("transaction_amount")
-    private long transactionAmount;
-
+    private Long transactionAmount;
+    
+    
     @JsonProperty("balance")
-    private String balance;
-
+    private Long balance;
+    
+    
     @JsonProperty("ret_code")
     private String retCode;
-
+    
+    
     @JsonProperty("ret_message")
     private String retMessage;
-
+    
+    
     @JsonProperty("page")
-    private int page;
-
+    private Integer page;
+    
+    
     @JsonProperty("page_size")
-    private int pageSize;
-
-    public String getTransactionID() {
-        return transactionID;
+    private Integer pageSize;
+    public String getTransactionId() {
+        return transactionId;
     }
 
-    public void setTransactionID(String transactionID) {
-        this.transactionID = transactionID;
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getIdUser() {
+        return idUser;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
-    public String getAccountID() {
-        return accountID;
+    public String getIdAccount() {
+        return idAccount;
     }
 
-    public void setAccountID(String accountID) {
-        this.accountID = accountID;
+    public void setIdAccount(String idAccount) {
+        this.idAccount = idAccount;
     }
 
-
-    public long getTransactionAmount() {
+    public Long getTransactionAmount() {
         return transactionAmount;
     }
 
-    public void setTransactionAmount(long transactionAmount) {
+    public void setTransactionAmount(Long transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
 
-
-    public String getBalance() {
+    public Long getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(Long balance) {
         this.balance = balance;
     }
 
@@ -90,35 +100,34 @@ public class OB9M1002Request implements Serializable {
         this.retMessage = retMessage;
     }
 
-
-    public int getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(Integer page) {
         this.page = page;
     }
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
-
+	
     @Override
     public String toString() {
-        return "Sob9m01002Request{" +
-                "transactionID='" + transactionID + '\'' +
-                ", userID='" + userID + '\'' +
-                ", accountID='" + accountID + '\'' +
-                ", transactionAmount=" + transactionAmount +
-                ", balance='" + balance + '\'' +
-                ", retCode='" + retCode + '\'' +
-                ", retMessage='" + retMessage + '\'' +
-                ", page=" + page +
-                ", pageSize=" + pageSize +
+        return "OB9M1002Request{"  +
+		"transactionId='" + transactionId + '\''  +
+		"idUser='" + idUser + '\''  +
+		"idAccount='" + idAccount + '\''  +
+		"transactionAmount='" + transactionAmount + '\''  +
+		"balance='" + balance + '\''  +
+		"retCode='" + retCode + '\''  +
+		"retMessage='" + retMessage + '\''  +
+		"page='" + page + '\''  +
+		"pageSize='" + pageSize + '\''  +
                 '}';
     }
 }

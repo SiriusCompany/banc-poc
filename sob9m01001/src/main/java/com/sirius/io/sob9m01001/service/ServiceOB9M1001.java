@@ -30,11 +30,11 @@ public class ServiceOB9M1001 {
 
     public Tuple2<OB9M1001Response, Map<String,String>>  handleOB9M1001(OB9M1001Request ob9M1001Request) throws ServiceException {
         UserAccountMapping userAccountMapping = new UserAccountMapping();
-        userAccountMapping.setIdUser(ob9M1001Request.getUserID());
+        userAccountMapping.setIdUser(ob9M1001Request.getIdUser());
         UserAccountMapping retrievedObject = this.userAccountMappingDAO.findById(userAccountMapping);
 
         if (null == retrievedObject) {
-            throw new ServiceException(ErrorCode.Banc000001, "Cannot found record by user id:%s", ob9M1001Request.getUserID());
+            throw new ServiceException(ErrorCode.Banc000001, "Cannot found record by user id:%s", ob9M1001Request.getIdUser());
         }
         OB9M1001Response OB9M1001Response = new OB9M1001Response();
         OB9M1001Response.setIdAccount(retrievedObject.getIdAccount());
@@ -43,8 +43,9 @@ public class ServiceOB9M1001 {
 
     public Tuple2<OB9M1001Response, Map<String,String>> insert(OB9M1001Request ob9M1001Request) throws ServiceException {
         UserAccountMapping userAccountMapping = new UserAccountMapping();
-        userAccountMapping.setIdUser(ob9M1001Request.getUserID());
-        userAccountMapping.setIdAccount(ob9M1001Request.getAccountID());
+        userAccountMapping.setIdUser(ob9M1001Request.getIdUser());
+        // TODO: Need to modify manually
+//        userAccountMapping.setIdAccount(ob9M1001Request.getIdAccount());
         if (0 == this.userAccountMappingDAO.insert(userAccountMapping)) {
             throw new ServiceException(ErrorCode.Banc000001, "Failed to insert record into db");
         }
@@ -54,8 +55,9 @@ public class ServiceOB9M1001 {
 
     public Tuple2<OB9M1001Response, Map<String,String>> update(OB9M1001Request ob9M1001Request) throws ServiceException {
         UserAccountMapping userAccountMapping = new UserAccountMapping();
-        userAccountMapping.setIdUser(ob9M1001Request.getUserID());
-        userAccountMapping.setIdAccount(ob9M1001Request.getAccountID());
+        userAccountMapping.setIdUser(ob9M1001Request.getIdUser());
+        // TODO: Need to modify manually
+//        userAccountMapping.setIdAccount(ob9M1001Request.getIdAccount());
         if (0 == this.userAccountMappingDAO.updateById(userAccountMapping)) {
             throw new ServiceException(ErrorCode.Banc000001, "Failed to update the record");
         }
@@ -65,9 +67,9 @@ public class ServiceOB9M1001 {
 
     public Tuple2<OB9M1001Response, Map<String,String>> delete(OB9M1001Request ob9M1001Request) throws ServiceException {
         UserAccountMapping userAccountMapping = new UserAccountMapping();
-        userAccountMapping.setIdUser(ob9M1001Request.getUserID());
+        userAccountMapping.setIdUser(ob9M1001Request.getIdUser());
         if (0 == this.userAccountMappingDAO.deleteById(userAccountMapping)) {
-            throw new ServiceException(ErrorCode.Banc000001, "Failed to delete record by user id:%s", ob9M1001Request.getUserID());
+            throw new ServiceException(ErrorCode.Banc000001, "Failed to delete record by user id:%s", ob9M1001Request.getIdUser());
         }
 
         return new Tuple2<>(new OB9M1001Response(), null);

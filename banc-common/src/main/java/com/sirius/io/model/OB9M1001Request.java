@@ -1,86 +1,54 @@
 package com.sirius.io.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public class OB9M1001Request implements Serializable {
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class OB9M1001Request implements Serializable {    
+    
     @JsonProperty("id_user")
-    private String userID;
-
-    @JsonProperty("id_account")
-    private String accountID;
-
+    private String idUser;
+    
+    
     @JsonProperty("page")
-    private int page;
-
+    private Integer page;
+    
+    
     @JsonProperty("page_size")
-    private int pageSize;
-
-    @JsonProperty("page_find_condition")
-    private String pageFindCondition;
-
-    @JsonProperty("page_find_order_by")
-    private String pageFindOrderBy;
-
-    public String getUserID() {
-        return userID;
+    private Integer pageSize;
+    public String getIdUser() {
+        return idUser;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
-    public String getAccountID() {
-        return accountID;
-    }
-
-    public void setAccountID(String accountID) {
-        this.accountID = accountID;
-    }
-
-    public int getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(Integer page) {
         this.page = page;
     }
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
-
-
-    public String getPageFindCondition() {
-        return pageFindCondition;
-    }
-
-    public void setPageFindCondition(String pageFindCondition) {
-        this.pageFindCondition = pageFindCondition;
-    }
-
-    public String getPageFindOrderBy() {
-        return pageFindOrderBy;
-    }
-
-    public void setPageFindOrderBy(String pageFindOrderBy) {
-        this.pageFindOrderBy = pageFindOrderBy;
-    }
-
+	
     @Override
     public String toString() {
-        return "Sob9m01001Request{" +
-                "userID='" + userID + '\'' +
-                ", accountID='" + accountID + '\'' +
-                ", page=" + page +
-                ", pageSize=" + pageSize +
-                ", pageFindCondition='" + pageFindCondition + '\'' +
-                ", pageFindOrderBy='" + pageFindOrderBy + '\'' +
+        return "OB9M1001Request{"  +
+		"idUser='" + idUser + '\''  +
+		"page='" + page + '\''  +
+		"pageSize='" + pageSize + '\''  +
                 '}';
     }
 }

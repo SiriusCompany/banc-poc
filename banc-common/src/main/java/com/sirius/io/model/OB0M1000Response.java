@@ -1,24 +1,26 @@
 package com.sirius.io.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public class OB0M1000Response implements Serializable {
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class OB0M1000Response implements Serializable {    
+    
     @JsonProperty("id_account")
-    private String accountID;
-
+    private String idAccount;
+    
+    
     @JsonProperty("balance")
     private Long balance;
-
-
-    public String getAccountID() {
-        return accountID;
+    public String getIdAccount() {
+        return idAccount;
     }
 
-    public void setAccountID(String accountID) {
-        this.accountID = accountID;
+    public void setIdAccount(String idAccount) {
+        this.idAccount = idAccount;
     }
 
     public Long getBalance() {
@@ -27,5 +29,13 @@ public class OB0M1000Response implements Serializable {
 
     public void setBalance(Long balance) {
         this.balance = balance;
+    }
+	
+    @Override
+    public String toString() {
+        return "OB0M1000Response{"  +
+		"idAccount='" + idAccount + '\''  +
+		"balance='" + balance + '\''  +
+                '}';
     }
 }

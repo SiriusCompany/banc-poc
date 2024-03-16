@@ -33,19 +33,15 @@ public class ServiceOB0M1000 {
     private ServiceConfigsProperties config;
 
     @Autowired
-    private DownstreamOB9M1002 downStreamOB9M1002;
-
-    @Autowired
-    private DownstreamOB1M1001 downstreamOB1M1001;
-
-    @Autowired
-    private DownstreamOB9M1001 downstreamOB9M1001;
-
-    @Autowired
     private DownstreamWS000001 downstreamWS000001;
-
     @Autowired
     private DownstreamWS000002 downstreamWS000002;
+    @Autowired
+    private DownstreamOB1M1001 downstreamOB1M1001;
+    @Autowired
+    private DownstreamOB9M1001 downstreamOB9M1001;
+    @Autowired
+    private DownstreamOB9M1002 downstreamOB9M1002;
 
 
     public Tuple2<OB0M1000Response, Map<String,String>> handleOB0M1000(Map<String,String> requestHeader, OB0M1000Request ob0M1000Request) throws ServiceException {
@@ -63,11 +59,11 @@ public class ServiceOB0M1000 {
             // 1. call BTS sob1m01001 to check the amount whether exceed the limit
             OB1M1001Response ob1M1001Response =  this.callSob1m01001(ob0M1000Request.getTransactionAmount());
             if (!ob1M1001Response.isOk()) {
-                throw new ServiceException(ErrorCode.Banc000002, "The transaction amount:%d exceed the limit", ob0M1000Request.getTransactionAmount());
+                throw new ServiceException("Banc000002", "The transaction amount:%d exceed the limit", ob0M1000Request.getTransactionAmount());
             }
 
             // 2. call DAS sob9m01001 get account id by user id
-            OB9M1001Response ob9M1001Response = this.callSob9m01001(ob0M1000Request.getUserID());
+            OB9M1001Response ob9M1001Response = this.callSob9m01001(ob0M1000Request.getIdUser());
             accountID = ob9M1001Response.getIdAccount();
 
 
@@ -76,25 +72,8 @@ public class ServiceOB0M1000 {
             this.logger.info("The response token is:[{}]", accessToken);
 
             // 4. call https://iolc7ic3g2.execute-api.us-east-1.amazonaws.com/dev/micro-accounts/api/consignar to get account detail
-            String accountBase64edString = this.accountBalanceAccumulation(transactionID, accountID, ob0M1000Request.getTransactionAmount(), accessToken);
-
-            this.logger.info("The response bode from account deposit: {}", accountBase64edString);
-            byte[] decodedBytes = Base64.getDecoder().decode(accountBase64edString);
-            String jsonBytes = new String(decodedBytes);
-
-
-            WS000002Response ws000002Response;
-            try {
-                ws000002Response = JSON.parseObject(jsonBytes, WS000002Response.class);
-                if (!StringUtils.isAllEmpty(ws000002Response.getError())) {
-                    throw new ServiceException(SYSTEM_INTERNAL_ERROR, ws000002Response.getError());
-                }
-                balance = ws000002Response.getBalance();
-            }catch (Exception e) {
-                this.logger.error("Failed to parse the response from account deposit(https://iolc7ic3g2.execute-api.us-east-1.amazonaws.com/dev/micro-accounts/api/consignar), the response body is {}, error:{}", jsonBytes, e);
-                throw new ServiceException(SYSTEM_INTERNAL_ERROR, String.format("Failed to request the service: https://iolc7ic3g2.execute-api.us-east-1.amazonaws.com/dev/micro-accounts/api/consignar, the response is: %s", jsonBytes));
-            }
-
+            WS000002Response ws000002Response = this.accountBalanceAccumulation(transactionID, accountID, ob0M1000Request.getTransactionAmount(), accessToken);
+            balance = ws000002Response.getBalance();
             if (!StringUtils.isAllEmpty(ws000002Response.getError())) {
                 throw new ServiceException(SYSTEM_INTERNAL_ERROR, ws000002Response.getError());
             }
@@ -111,12 +90,12 @@ public class ServiceOB0M1000 {
         } finally {
             // call DAS sob9m01002 to save transaction history
             OB9M1002Request ob9M1002Request = new OB9M1002Request();
-            ob9M1002Request.setTransactionID(transactionID);
-            ob9M1002Request.setUserID(ob0M1000Request.getUserID());
-            ob9M1002Request.setAccountID(accountID);
+            ob9M1002Request.setTransactionId(transactionID);
+            ob9M1002Request.setIdUser(ob0M1000Request.getIdUser());
+            ob9M1002Request.setIdAccount(accountID);
             ob9M1002Request.setTransactionAmount(ob0M1000Request.getTransactionAmount());
             if (null != balance) {
-                ob9M1002Request.setBalance("" + balance);
+                ob9M1002Request.setBalance(balance);
             } else {
                 ob9M1002Request.setBalance(null);
             }
@@ -124,10 +103,10 @@ public class ServiceOB0M1000 {
             ob9M1002Request.setRetMessage(retMessage);
 
 
-            this.downStreamOB9M1002.callOB9M1002(null, ob9M1002Request);
+            this.downstreamOB9M1002.callOB9M1002(null, ob9M1002Request);
         }
 
-        OB0M1000Response.setAccountID(accountID);
+        OB0M1000Response.setIdAccount(accountID);
         OB0M1000Response.setBalance(balance);
 
         return new Tuple2<>(OB0M1000Response, null);
@@ -144,17 +123,11 @@ public class ServiceOB0M1000 {
             this.logger.info("The request content:[{}]", requestContent);
             Map<String,String> header  = new HashMap<>();
             header.put("Content-Type", "application/x-www-form-urlencoded");
-            DefaultRequest meshRequest = DefaultRequest.build()
-                    .setBody(requestContent.getBytes(StandardCharsets.UTF_8));
 
-            meshRequest.requestOptions().setHeader(header)
-                    .setEncoder(CodecType.TEXT)
-                    .setDecoder(CodecType.JSON);
-            ResponseMeta<AOGResponse> meshResponseMeta = this.downstreamWS000001.callWS000001(header, requestContent);
-
-            byte[] decodedBytes = Base64.getDecoder().decode(meshResponseMeta.response().getBody());
-
-            WS000001Response ws000001Response = JSON.parseObject(decodedBytes, WS000001Response.class);
+            WS000001Request ws000001Request = new WS000001Request();
+            ws000001Request.setContent(requestContent);
+            ResponseMeta<WS000001Response> meshResponseMeta = this.downstreamWS000001.callWS000001(header, ws000001Request);
+            WS000001Response ws000001Response = meshResponseMeta.response();
 
             if (!StringUtils.isAllEmpty(ws000001Response.getError())) {
                 throw new ServiceException(SYSTEM_INTERNAL_ERROR, ws000001Response.getError());
@@ -168,22 +141,22 @@ public class ServiceOB0M1000 {
         }
     }
 
-    private String accountBalanceAccumulation(String transactionID, String accountID, long amount, String token) {
+    private WS000002Response accountBalanceAccumulation(String transactionID, String accountID, long amount, String token) {
         Map<String,String> header  = new HashMap<>();
         header.put("transactionId", transactionID);
         header.put("Content-Type", "application/json");
         header.put("Authorization", String.format("Bearer %s", token));
         WS000002Request ws000002Request = new WS000002Request();
-        ws000002Request.setAccountID(accountID);
+        ws000002Request.setAccountId(accountID);
         ws000002Request.setAmount(amount);
-        ResponseMeta<AOGResponse> meshRequestMeta = this.downstreamWS000002.callWS000002(header, ws000002Request);
+        ResponseMeta<WS000002Response> meshRequestMeta = this.downstreamWS000002.callWS000002(header, ws000002Request);
 
-        return meshRequestMeta.response().getBody();
+        return meshRequestMeta.response();
     }
 
     private OB9M1001Response callSob9m01001(String userID) {
         OB9M1001Request ob9M1001Request = new OB9M1001Request();
-        ob9M1001Request.setUserID(userID);
+        ob9M1001Request.setIdUser(userID);
         ResponseMeta<OB9M1001Response> responseMeta = this.downstreamOB9M1001.callOB9M1001(null, ob9M1001Request);
 
         return responseMeta.response();

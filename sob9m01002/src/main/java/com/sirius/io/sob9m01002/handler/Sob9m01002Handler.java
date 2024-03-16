@@ -8,7 +8,7 @@ import com.multiverse.eventkit.kit.handler.BaseHandler;
 import com.sirius.io.dao.PageResult;
 import com.sirius.io.model.OB9M1002Request;
 import com.sirius.io.model.OB9M1002Response;
-import com.sirius.io.sob9m01002.entity.TransactionHistory;
+import com.sirius.io.sob9m01002.entity.BalanceAccumulationHistory;
 import com.sirius.io.sob9m01002.service.ServiceOB9M1002;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +69,7 @@ public class Sob9m01002Handler extends BaseHandler {
     }
 
 //    @Router(eventKey = "XXXXXX", handlePost = "/v1/findPage")
-    public PageResult<TransactionHistory> findPage(OB9M1002Request ob9M1002Request) throws ServiceException {
+    public PageResult<BalanceAccumulationHistory> findPage(OB9M1002Request ob9M1002Request) throws ServiceException {
         return serviceOB9M1002.findPage(ob9M1002Request);
     }
 

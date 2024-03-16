@@ -1,22 +1,28 @@
 package com.sirius.io.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public class WS000001Response implements Serializable {
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class WS000001Response implements Serializable {    
+    
     @JsonProperty("error")
     private String error;
-
+    
+    
     @JsonProperty("access_token")
     private String accessToken;
-
+    
+    
     @JsonProperty("expires_in")
-    private int expiresIn;
-
+    private Integer expiresIn;
+    
+    
     @JsonProperty("token_type")
     private String tokenType;
-
     public String getError() {
         return error;
     }
@@ -33,11 +39,11 @@ public class WS000001Response implements Serializable {
         this.accessToken = accessToken;
     }
 
-    public int getExpiresIn() {
+    public Integer getExpiresIn() {
         return expiresIn;
     }
 
-    public void setExpiresIn(int expiresIn) {
+    public void setExpiresIn(Integer expiresIn) {
         this.expiresIn = expiresIn;
     }
 
@@ -48,14 +54,14 @@ public class WS000001Response implements Serializable {
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
     }
-
+	
     @Override
     public String toString() {
-        return "GenerateTokenResponse{" +
-                "error='" + error + '\'' +
-                ", accessToken='" + accessToken + '\'' +
-                ", expiresIn=" + expiresIn +
-                ", tokenType='" + tokenType + '\'' +
+        return "WS000001Response{"  +
+		"error='" + error + '\''  +
+		"accessToken='" + accessToken + '\''  +
+		"expiresIn='" + expiresIn + '\''  +
+		"tokenType='" + tokenType + '\''  +
                 '}';
     }
 }

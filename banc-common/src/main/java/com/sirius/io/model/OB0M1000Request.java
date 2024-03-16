@@ -1,41 +1,42 @@
 package com.sirius.io.model;
 
-import java.io.Serializable;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 
-public class OB0M1000Request implements Serializable {
+import java.io.Serializable;
+
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class OB0M1000Request implements Serializable {    
+    @NotNull(message = "id_user cannot be null")
     @JsonProperty("id_user")
-    @NotNull
-    private String userID;
-
+    private String idUser;
+    
+    @NotNull(message = "transaction_amount cannot be null")
     @JsonProperty("transaction_amount")
-    @NotNull
-    private long transactionAmount;
-
-    public String getUserID() {
-        return userID;
+    private Long transactionAmount;
+    public String getIdUser() {
+        return idUser;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
-
-    public long getTransactionAmount() {
+    public Long getTransactionAmount() {
         return transactionAmount;
     }
 
-    public void setTransactionAmount(long transactionAmount) {
+    public void setTransactionAmount(Long transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
-
+	
     @Override
     public String toString() {
-        return "Sob0m01000Request{" +
-                "userID='" + userID + '\'' +
-                ", transactionAmount=" + transactionAmount +
+        return "OB0M1000Request{"  +
+		"idUser='" + idUser + '\''  +
+		"transactionAmount='" + transactionAmount + '\''  +
                 '}';
     }
 }
