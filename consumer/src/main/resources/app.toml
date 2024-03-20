@@ -1,0 +1,35 @@
+serverAddress = "http://127.0.0.1:17803"
+callbackPort = 17093
+commType = "mesh"
+port = 6120
+clientSideStatusFSM = true
+
+[service]
+serviceId = "consumer"
+org = "ORG001"
+az = "AZ0001"
+wks = "WKS"
+env = "ENV"
+nodeId = "NODE00000001"
+commonSu = "000000"
+su = "SU0001"
+
+
+[log]
+logFile = "consumer.log"
+logLevel = "info"
+logLevelUnixSocket = "/tmp/consumer-logs.sock"
+logFileRootPath = "./logs"
+maxSize = 200
+maxDays = 7
+maxBackups = 10
+console = true
+mashKeys = ""
+
+[heartbeat]
+topicName="asmHeartBeatMetric"
+intervalSeconds=50000
+
+
+[eventKey]
+consumer = "consumer"
