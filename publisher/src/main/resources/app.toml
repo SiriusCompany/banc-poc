@@ -1,0 +1,46 @@
+serverAddress = "http://127.0.0.1:17803"
+callbackPort = 17093
+commType = "mesh"
+port = 6119
+clientSideStatusFSM = true
+
+[service]
+serviceId = "publisher"
+org = "ORG001"
+az = "AZ0001"
+wks = "WKS"
+env = "ENV"
+nodeId = "NODE00000001"
+commonSu = "000000"
+su = "SU0001"
+
+[log]
+logFile = "publisher.log"
+logLevel = "info"
+logLevelUnixSocket = "/tmp/publisher-logs.sock"
+logFileRootPath = "./logs"
+maxSize = 200
+maxDays = 7
+maxBackups = 10
+console = true
+mashKeys = ""
+
+[heartbeat]
+topicName="asmHeartBeatMetric"
+intervalSeconds=50000
+
+
+[eventKey]
+publisher = "publisher"
+
+
+[downstream]
+    [downstream.consumer]
+        eventType = "TRN"
+        eventId = "consumer"
+        timeoutMilliseconds = 20000
+        version = "v1"
+        httpContextType = "application/json"
+        protoType = "Http"
+        httpAddress="http://127.0.0.1:6120/v1/consumer"
+        httpMethod = "POST"
