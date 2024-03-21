@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public class ServiceConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(ConsumerHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(ServiceConsumer.class);
 
     @Autowired
     private ServiceConfigsProperties config;
